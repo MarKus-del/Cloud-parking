@@ -29,6 +29,8 @@ class ParkingControllerTest extends AbstractContainerBase{
     @Test
     void whenFindAllCheckResult() {
         RestAssured.given()
+                .auth()
+                .basic("user", "123")
                 .when().get("/parking")
                 .then()
                 .statusCode(HttpStatus.OK.value());
@@ -44,6 +46,8 @@ class ParkingControllerTest extends AbstractContainerBase{
 
 
         RestAssured.given()
+                .auth()
+                .basic("user", "123")
                 .when()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .body(parkingCreated)
