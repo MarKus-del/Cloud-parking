@@ -1,6 +1,7 @@
 package com.markusdel.cloudparking.service;
 
 import com.markusdel.cloudparking.dto.ParkingDTO;
+import com.markusdel.cloudparking.exceptions.ParkingNotFoundException;
 import com.markusdel.cloudparking.model.Parking;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,12 @@ public class ParkingService {
     }
 
     public Parking findById(String id) {
-        return parkingMap.get(id);
+        Parking parking = parkingMap.get(id);
+
+        if(parking == null) {
+            throw new ParkingNotFoundException(id);
+        }
+        return parking;
     }
 
     public Parking create(Parking parking) {
@@ -41,4 +47,20 @@ public class ParkingService {
         parkingMap.put(newId, parking);
         return parkingMap.get(newId);
     }
+
+    public void delete(String id) {
+        Parking byId = findById(id);
+        parkingMap.remove(id);
+    }
+
+    public Parking update(String id, Parking parking) {
+        Parking byId = findById(id);
+        byId.setColor(parking.getColor());
+        byId.setState(parking.getState());
+        byId.setLicense(parking.getLicense());
+        byId.setModel(parking.getModel());
+        parkingMap.replace(id, byId);
+        return byId;
+    }
+
 }
